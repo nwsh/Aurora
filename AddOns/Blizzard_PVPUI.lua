@@ -33,6 +33,7 @@ C.modules["Blizzard_PVPUI"] = function()
 
 		bu.Background:SetAllPoints()
 		bu.Background:SetTexture(r, g, b, .2)
+		bu.Background:Hide()
 
 		icon:SetTexCoord(.08, .92, .08, .92)
 		icon:SetPoint("LEFT", bu, "LEFT")
@@ -100,6 +101,30 @@ C.modules["Blizzard_PVPUI"] = function()
 	BonusFrame.CallToArmsButton:SetPoint("TOP", BonusFrame.RandomBGButton, "BOTTOM", 0, -1)
 	BonusFrame.WorldPVP2Button:SetPoint("TOP", BonusFrame.WorldPVP1Button, "BOTTOM", 0, -1)
 
+	BonusFrame.BattlegroundReward1.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward1.Icon, "LEFT", -2, 0)
+	BonusFrame.BattlegroundReward1.Icon:SetTexCoord(.08, .92, .08, .92)
+	BonusFrame.BattlegroundReward1.Icon:SetSize(16, 16)
+	F.CreateBG(BonusFrame.BattlegroundReward1.Icon)
+	BonusFrame.BattlegroundReward2.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward2.Icon, "LEFT", -2, 0)
+	BonusFrame.BattlegroundReward2.Icon:SetTexCoord(.08, .92, .08, .92)
+	BonusFrame.BattlegroundReward2.Icon:SetSize(16, 16)
+	F.CreateBG(BonusFrame.BattlegroundReward2.Icon)
+
+	hooksecurefunc("HonorFrameBonusFrame_Update", function()
+		local canQueue, bgName, battleGroundID, hasWon, winHonorAmount, winConquestAmount = GetHolidayBGInfo()
+		local rewardIndex = 0
+		if winConquestAmount and winConquestAmount > 0 then
+			rewardIndex = rewardIndex + 1
+			local frame = HonorFrame.BonusFrame["BattlegroundReward"..rewardIndex]
+			frame.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
+		end
+		if winHonorAmount and winHonorAmount > 0 then
+			rewardIndex = rewardIndex + 1
+			local frame = HonorFrame.BonusFrame["BattlegroundReward"..rewardIndex]
+			frame.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
+		end
+	end)
+
 	-- Honor frame specific
 
 	for _, bu in pairs(HonorFrame.SpecificFrame.buttons) do
@@ -166,6 +191,18 @@ C.modules["Blizzard_PVPUI"] = function()
 	local classColour = C.classcolours[select(2, UnitClass("player"))]
 	ConquestFrame.RatedBG.TeamNameText:SetText(UnitName("player"))
 	ConquestFrame.RatedBG.TeamNameText:SetTextColor(classColour.r, classColour.g, classColour.b)
+
+	ConquestFrame.ArenaReward.Amount:SetPoint("RIGHT", ConquestFrame.ArenaReward.Icon, "LEFT", -2, 0)
+	ConquestFrame.ArenaReward.Icon:SetTexCoord(.08, .92, .08, .92)
+	ConquestFrame.ArenaReward.Icon:SetSize(16, 16)
+	F.CreateBG(ConquestFrame.ArenaReward.Icon)
+	ConquestFrame.RatedBGReward.Amount:SetPoint("RIGHT", ConquestFrame.RatedBGReward.Icon, "LEFT", -2, 0)
+	ConquestFrame.RatedBGReward.Icon:SetTexCoord(.08, .92, .08, .92)
+	ConquestFrame.RatedBGReward.Icon:SetSize(16, 16)
+	F.CreateBG(ConquestFrame.RatedBGReward.Icon)
+
+	ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
+	ConquestFrame.RatedBGReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
 
 	for i = 1, 4 do
 		select(i, ConquestBar:GetRegions()):Hide()
@@ -291,6 +328,7 @@ C.modules["Blizzard_PVPUI"] = function()
 
 		bu.Background:SetTexture(r, g, b, .2)
 		bu.Background:SetAllPoints()
+		bu.Background:Hide()
 
 		F.Reskin(bu, true)
 	end
@@ -386,7 +424,7 @@ C.modules["Blizzard_PVPUI"] = function()
 			for i=1, #team do
 				if (team[i].online) then
 					local color = C.classcolours[team[i].class]
-					info.text = color..team[i].name..FONT_COLOR_CODE_CLOSE;
+					info.text = ConvertRGBtoColorString(color)..team[i].name..FONT_COLOR_CODE_CLOSE;
 					info.func = function (menu, name) InviteToGroup(name); end
 					info.arg1 = team[i].name;
 					info.disabled = nil;
