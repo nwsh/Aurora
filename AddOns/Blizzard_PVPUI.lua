@@ -98,9 +98,6 @@ C.modules["Blizzard_PVPUI"] = function()
 		bu.SelectedTexture:SetAllPoints()
 	end
 
-	BonusFrame.CallToArmsButton:SetPoint("TOP", BonusFrame.RandomBGButton, "BOTTOM", 0, -1)
-	BonusFrame.WorldPVP2Button:SetPoint("TOP", BonusFrame.WorldPVP1Button, "BOTTOM", 0, -1)
-
 	BonusFrame.BattlegroundReward1.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward1.Icon, "LEFT", -2, 0)
 	BonusFrame.BattlegroundReward1.Icon:SetTexCoord(.08, .92, .08, .92)
 	BonusFrame.BattlegroundReward1.Icon:SetSize(16, 16)
