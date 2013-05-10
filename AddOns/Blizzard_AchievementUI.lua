@@ -119,11 +119,10 @@ C.modules["Blizzard_AchievementUI"] = function()
 		check:SetDesaturated(true)
 		check:SetVertexColor(r, g, b)
 
-		local tex = ch:CreateTexture(nil, "BACKGROUND")
+		local tex = F.CreateGradient(ch)
 		tex:SetPoint("TOPLEFT", 4, -4)
 		tex:SetPoint("BOTTOMRIGHT", -4, 4)
 		tex:SetTexture(C.media.backdrop)
-		tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
 
 		local left = ch:CreateTexture(nil, "BACKGROUND")
 		left:SetWidth(1)

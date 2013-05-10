@@ -36,12 +36,15 @@ C.media = {
 	["checked"] = "Interface\\AddOns\\Aurora\\media\\CheckButtonHilight",
 	["font"] = "Interface\\AddOns\\Aurora\\media\\font.ttf",
 	["glow"] = "Interface\\AddOns\\Aurora\\media\\glow",
+	["gradient"] = "Interface\\AddOns\\Aurora\\media\\gradient",
 	["roleIcons"] = "Interface\\Addons\\Aurora\\media\\UI-LFG-ICON-ROLES",
 }
 
 C.defaults = {
 	["alpha"] = 0.5,
 	["bags"] = true,
+	["buttonColour"] = {.3, .3, .3, .3},
+	["buttonColourGradient"] = true,
 	["chatBubbles"] = true,
 	["enableFont"] = true,
 	["gradientAlpha"] = {"VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35},
@@ -107,55 +110,41 @@ end
 
 -- we assign these after loading variables for caching
 -- otherwise we call an extra unpack() every time
-local gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha
+local buttonR, buttonG, buttonB, buttonA
 
 F.CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha(gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha)
+	tex:SetTexture(buttonColourGradient and C.media.gradient or C.media.backdrop)
+	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
 end
 
-F.CreatePulse = function(frame)
-	local speed = .05
-	local mult = 1
-	local alpha = 1
-	local last = 0
-	frame:SetScript("OnUpdate", function(self, elapsed)
-		last = last + elapsed
-		if last > speed then
-			last = 0
-			self:SetAlpha(alpha)
-		end
-		alpha = alpha - elapsed*mult
-		if alpha < 0 and mult > 0 then
-			mult = mult*-1
-			alpha = 0
-		elseif alpha > 1 and mult < 0 then
-			mult = mult*-1
-		end
-	end)
-end
-
-local function StartGlow(f)
+local function colourButton(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r, g, b, .1)
+
+	if buttonColourGradient then
+		f:SetBackdropColor(r, g, b, .3)
+	else
+		f.tex:SetVertexColor(r / 4, g / 4, b / 4)
+	end
+
 	f:SetBackdropBorderColor(r, g, b)
-	f.glow:SetAlpha(1)
-	F.CreatePulse(f.glow)
 end
 
-local function StopGlow(f)
-	f:SetBackdropColor(0, 0, 0, 0)
+local function clearButton(f)
+	if buttonColourGradient then
+		f:SetBackdropColor(0, 0, 0, 0)
+	else
+		f.tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+	end
+
 	f:SetBackdropBorderColor(0, 0, 0)
-	f.glow:SetScript("OnUpdate", nil)
-	f.glow:SetAlpha(0)
 end
 
-F.Reskin = function(f, noGlow)
+F.Reskin = function(f, noHighlight)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -169,21 +158,11 @@ F.Reskin = function(f, noGlow)
 
 	F.CreateBD(f, .0)
 
-	F.CreateGradient(f)
+	f.tex = F.CreateGradient(f)
 
-	if not noGlow then
-		f.glow = CreateFrame("Frame", nil, f)
-		f.glow:SetBackdrop({
-			edgeFile = C.media.glow,
-			edgeSize = 5,
-		})
-		f.glow:SetPoint("TOPLEFT", -6, 6)
-		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
-		f.glow:SetBackdropBorderColor(r, g, b)
-		f.glow:SetAlpha(0)
-
-		f:HookScript("OnEnter", StartGlow)
- 		f:HookScript("OnLeave", StopGlow)
+	if not noHighlight then
+		f:HookScript("OnEnter", colourButton)
+ 		f:HookScript("OnLeave", clearButton)
 	end
 end
 
@@ -652,7 +631,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		alpha = AuroraConfig.alpha
-		gradOr, startR, startG, startB, startAlpha, endR, endG, endB, endAlpha = unpack(AuroraConfig.gradientAlpha)
+		buttonR, buttonG, buttonB, buttonA = unpack(AuroraConfig.buttonColour)
+		buttonColourGradient = AuroraConfig.buttonColourGradient
 
 		if AuroraConfig.useCustomColour then
 			r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
