@@ -3543,6 +3543,54 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinArrow(PVPBannerFrameCustomization2LeftButton, "left")
 		F.ReskinArrow(PVPBannerFrameCustomization2RightButton, "right")
 
+		-- PVP Ready Dialog
+
+		local PVPReadyDialog = PVPReadyDialog
+
+		PVPReadyDialogBackground:Hide()
+		PVPReadyDialogBottomArt:Hide()
+		PVPReadyDialogFiligree:Hide()
+
+		PVPReadyDialogRoleIconTexture:SetTexture(C.media.roleIcons)
+
+		do
+			local left = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			left:SetWidth(1)
+			left:SetTexture(C.media.backdrop)
+			left:SetVertexColor(0, 0, 0)
+			left:SetPoint("TOPLEFT", 9, -7)
+			left:SetPoint("BOTTOMLEFT", 9, 10)
+
+			local right = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			right:SetWidth(1)
+			right:SetTexture(C.media.backdrop)
+			right:SetVertexColor(0, 0, 0)
+			right:SetPoint("TOPRIGHT", -8, -7)
+			right:SetPoint("BOTTOMRIGHT", -8, 10)
+
+			local top = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			top:SetHeight(1)
+			top:SetTexture(C.media.backdrop)
+			top:SetVertexColor(0, 0, 0)
+			top:SetPoint("TOPLEFT", 9, -7)
+			top:SetPoint("TOPRIGHT", -8, -7)
+
+			local bottom = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			bottom:SetHeight(1)
+			bottom:SetTexture(C.media.backdrop)
+			bottom:SetVertexColor(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", 9, 10)
+			bottom:SetPoint("BOTTOMRIGHT", -8, 10)
+		end
+
+		F.CreateBD(PVPReadyDialog)
+		PVPReadyDialog.SetBackdrop = F.dummy
+		F.CreateSD(PVPReadyDialog)
+
+		F.Reskin(PVPReadyDialog.enterButton)
+		F.Reskin(PVPReadyDialog.leaveButton)
+		F.ReskinClose(PVPReadyDialogCloseButton)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
