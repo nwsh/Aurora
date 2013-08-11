@@ -15,9 +15,9 @@ tinsert(C.modules["Aurora"], function()
 
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
-	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
+	GroupFinderFrameGroupButton4.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
 
-	for i = 1, 3 do
+	for i = 1, 4 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
@@ -36,7 +36,7 @@ tinsert(C.modules["Aurora"], function()
 
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
 		local self = GroupFinderFrame
-		for i = 1, 3 do
+		for i = 1, 4 do
 			local button = self["groupButton"..i]
 			if i == index then
 				button.bg:Show()

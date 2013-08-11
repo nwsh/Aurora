@@ -43,11 +43,11 @@ C.media = {
 C.defaults = {
 	["alpha"] = 0.5,
 	["bags"] = true,
-	["buttonColour"] = {.3, .3, .3, .3},
-	["buttonColourGradient"] = true,
+	["buttonGradientColour"] = {.3, .3, .3, .3},
+	["buttonSolidColour"] = {.2, .2, .2, 1},
+	["useButtonGradientColour"] = true,
 	["chatBubbles"] = true,
 	["enableFont"] = true,
-	["gradientAlpha"] = {"VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35},
 	["loot"] = true,
 	["useCustomColour"] = false,
 		["customColour"] = {r = 1, g = 1, b = 1},
@@ -55,6 +55,18 @@ C.defaults = {
 	["qualityColour"] = true,
 	["tooltips"] = true,
 }
+
+C.tooltipAddons = {
+	["CowTip"] = true,
+	["FreebTip"] = true,
+	["iTip"] = true,
+	["lolTip"] = true,
+	["StarTip"] = true,
+	["TipTac"] = true,
+	["TipTop"] = true,
+}
+
+C.shouldStyleTooltips = true -- set to false if one of the above is loaded or AuroraConfig.tooltips is false
 
 C.frames = {}
 
@@ -116,7 +128,7 @@ F.CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(buttonColourGradient and C.media.gradient or C.media.backdrop)
+	tex:SetTexture(useButtonGradientColour and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
@@ -125,7 +137,7 @@ end
 local function colourButton(f)
 	if not f:IsEnabled() then return end
 
-	if buttonColourGradient then
+	if useButtonGradientColour then
 		f:SetBackdropColor(r, g, b, .3)
 	else
 		f.tex:SetVertexColor(r / 4, g / 4, b / 4)
@@ -135,7 +147,7 @@ local function colourButton(f)
 end
 
 local function clearButton(f)
-	if buttonColourGradient then
+	if useButtonGradientColour then
 		f:SetBackdropColor(0, 0, 0, 0)
 	else
 		f.tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
@@ -639,8 +651,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		alpha = AuroraConfig.alpha
-		buttonR, buttonG, buttonB, buttonA = unpack(AuroraConfig.buttonColour)
-		buttonColourGradient = AuroraConfig.buttonColourGradient
+		useButtonGradientColour = AuroraConfig.useButtonGradientColour
+
+		if useButtonGradientColour then
+			buttonR, buttonG, buttonB, buttonA = unpack(AuroraConfig.buttonGradientColour)
+		else
+			buttonR, buttonG, buttonB, buttonA = unpack(AuroraConfig.buttonSolidColour)
+		end
 
 		if AuroraConfig.useCustomColour then
 			r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
@@ -683,7 +700,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Simple backdrops ]]
 
-		local bds = {"AutoCompleteBox", "BNToastFrame", "TicketStatusFrameButton", "GearManagerDialogPopup", "TokenFramePopup", "RaidInfoFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog", "QueueStatusFrame"}
+		local bds = {"AutoCompleteBox", "TicketStatusFrameButton", "GearManagerDialogPopup", "TokenFramePopup", "RaidInfoFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog", "QueueStatusFrame"}
 
 		for i = 1, #bds do
 			local bd = _G[bds[i]]
@@ -730,7 +747,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Input frames ]]
 
-		local inputs = {"AddFriendNameEditBox", "SendMailNameEditBox", "SendMailSubjectEditBox", "SendMailMoneyGold", "SendMailMoneySilver", "SendMailMoneyCopper", "GearManagerDialogPopupEditBox", "HelpFrameKnowledgebaseSearchBox", "ChannelFrameDaughterFrameChannelName", "ChannelFrameDaughterFrameChannelPassword", "BagItemSearchBox", "BankItemSearchBox", "ScrollOfResurrectionSelectionFrameTargetEditBox", "ScrollOfResurrectionFrameNoteFrame"}
+		local inputs = {"AddFriendNameEditBox", "GearManagerDialogPopupEditBox", "HelpFrameKnowledgebaseSearchBox", "ChannelFrameDaughterFrameChannelName", "ChannelFrameDaughterFrameChannelPassword", "BagItemSearchBox", "BankItemSearchBox", "ScrollOfResurrectionSelectionFrameTargetEditBox", "ScrollOfResurrectionFrameNoteFrame"}
 		for i = 1, #inputs do
 			local input = _G[inputs[i]]
 			if input then
@@ -1069,6 +1086,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		bgmoney:SetFrameLevel(OpenMailMoneyButton:GetFrameLevel()-1)
 		F.CreateBD(bgmoney)
 
+		SendMailSubjectEditBox:SetPoint("TOPLEFT", SendMailNameEditBox, "BOTTOMLEFT", 0, -1)
+
 		for i = 1, INBOXITEMS_TO_DISPLAY do
 			local it = _G["MailItem"..i]
 			local bu = _G["MailItem"..i.."Button"]
@@ -1130,6 +1149,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.ReskinPortraitFrame(MailFrame, true)
 		F.ReskinPortraitFrame(OpenMailFrame, true)
+		F.ReskinPortraitFrame(MailFrame, true)
+		F.ReskinPortraitFrame(OpenMailFrame, true)
+		F.ReskinInput(SendMailNameEditBox, 20)
+		F.ReskinInput(SendMailSubjectEditBox)
+		F.ReskinInput(SendMailMoneyGold)
+		F.ReskinInput(SendMailMoneySilver)
+		F.ReskinInput(SendMailMoneyCopper)
 
 		-- Currency frame
 
@@ -1264,6 +1290,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
 
+		-- Flexible raid
+
+		F.ReskinDropDown(FlexRaidFrameSelectionDropDown)
+
 		-- Scenario finder
 
 		ScenarioFinderFrameInset:DisableDrawLayer("BORDER")
@@ -1273,6 +1303,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ScenarioQueueFrameRandomScrollFrameScrollBackground:Hide()
 		ScenarioQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
 		ScenarioQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
+		ScenarioQueueFrameSpecificScrollFrameScrollBackgroundTopLeft:Hide()
+		ScenarioQueueFrameSpecificScrollFrameScrollBackgroundBottomRight:Hide()
 		ScenarioQueueFrame.Bg:Hide()
 		ScenarioFinderFrameInset:GetRegions():Hide()
 
@@ -1318,6 +1350,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 		F.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
 		F.ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
+		F.ReskinScroll(ScenarioQueueFrameSpecificScrollFrameScrollBar)
 
 		-- Raid frame (social frame)
 
@@ -1390,19 +1423,29 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("SpellButton_UpdateButton", function(self)
+			if SpellBookFrame.bookType == BOOKTYPE_PROFESSION then return end
+
 			local slot, slotType = SpellBook_GetSpellBookSlot(self);
 			local name = self:GetName();
 			local subSpellString = _G[name.."SubSpellName"]
 
+			local isOffSpec = self.offSpecID ~= 0 and SpellBookFrame.bookType == BOOKTYPE_SPELL
+
 			subSpellString:SetTextColor(1, 1, 1)
+
 			if slotType == "FUTURESPELL" then
 				local level = GetSpellAvailableLevel(slot, SpellBookFrame.bookType)
-				if (level and level > UnitLevel("player")) then
-					self.RequiredLevelString:SetTextColor(.7, .7, .7)
+				if level and level > UnitLevel("player") then
 					self.SpellName:SetTextColor(.7, .7, .7)
 					subSpellString:SetTextColor(.7, .7, .7)
 				end
+			else
+				if slotType == "SPELL" and isOffSpec then
+					subSpellString:SetTextColor(.7, .7, .7)
+				end
 			end
+
+			self.RequiredLevelString:SetTextColor(.7, .7, .7)
 
 			local ic = _G[name.."IconTexture"]
 			if not ic.bg then return end
@@ -1802,6 +1845,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(FriendsFrameMutePlayerButton)
 		F.ReskinDropDown(FriendsFrameStatusDropDown)
 
+		-- Battlenet toast frame
+
+		F.CreateBD(BNToastFrame)
+		F.CreateBD(BNToastFrame.TooltipFrame)
+		BNToastFrameCloseButton:SetAlpha(0)
+
 		-- Battletag invite frame
 
 		for i = 1, 9 do
@@ -2176,6 +2225,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			line:SetPoint("RIGHT", ic, 1, 0)
 			F.CreateBD(line)
 		end
+
+		QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
 
 		for i = 1, MAX_NUM_ITEMS do
 			local bu = _G["QuestInfoItem"..i]
@@ -2787,7 +2838,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			Graphics_Quality.SetBackdrop = F.dummy
 
-			local checkboxes = {"Advanced_UseUIScale", "Advanced_MaxFPSCheckBox", "Advanced_MaxFPSBKCheckBox", "Advanced_DesktopGamma", "NetworkOptionsPanelOptimizeSpeed", "NetworkOptionsPanelUseIPv6", "AudioOptionsSoundPanelEnableSound", "AudioOptionsSoundPanelSoundEffects", "AudioOptionsSoundPanelErrorSpeech", "AudioOptionsSoundPanelEmoteSounds", "AudioOptionsSoundPanelPetSounds", "AudioOptionsSoundPanelMusic", "AudioOptionsSoundPanelLoopMusic", "AudioOptionsSoundPanelPetBattleMusic", "AudioOptionsSoundPanelAmbientSounds", "AudioOptionsSoundPanelSoundInBG", "AudioOptionsSoundPanelReverb", "AudioOptionsSoundPanelHRTF", "AudioOptionsSoundPanelEnableDSPs", "AudioOptionsSoundPanelUseHardware", "AudioOptionsVoicePanelEnableVoice", "AudioOptionsVoicePanelEnableMicrophone", "AudioOptionsVoicePanelPushToTalkSound"}
+			local checkboxes = {"Advanced_UseUIScale", "Advanced_MaxFPSCheckBox", "Advanced_MaxFPSBKCheckBox", "Advanced_DesktopGamma", "NetworkOptionsPanelOptimizeSpeed", "NetworkOptionsPanelUseIPv6", "AudioOptionsSoundPanelEnableSound", "AudioOptionsSoundPanelSoundEffects", "AudioOptionsSoundPanelErrorSpeech", "AudioOptionsSoundPanelEmoteSounds", "AudioOptionsSoundPanelPetSounds", "AudioOptionsSoundPanelMusic", "AudioOptionsSoundPanelLoopMusic", "AudioOptionsSoundPanelPetBattleMusic", "AudioOptionsSoundPanelAmbientSounds", "AudioOptionsSoundPanelSoundInBG", "AudioOptionsSoundPanelReverb", "AudioOptionsSoundPanelHRTF", "AudioOptionsSoundPanelEnableDSPs", "AudioOptionsVoicePanelEnableVoice", "AudioOptionsVoicePanelEnableMicrophone", "AudioOptionsVoicePanelPushToTalkSound"}
 			for i = 1, #checkboxes do
 				F.ReskinCheck(_G[checkboxes[i]])
 			end
@@ -3684,7 +3735,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MerchantNextPageButton:GetRegions():Hide()
 		select(2, MerchantPrevPageButton:GetRegions()):Hide()
 		select(2, MerchantNextPageButton:GetRegions()):Hide()
-		BNToastFrameCloseButton:SetAlpha(0)
 		LFDQueueFrameRandomScrollFrameScrollBackground:Hide()
 		ChannelFrameDaughterFrameCorner:Hide()
 		LFDQueueFrameSpecificListScrollFrameScrollBackgroundTopLeft:Hide()
@@ -3725,6 +3775,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		OpenScrollBarBackgroundTop:Hide()
 		select(2, OpenMailScrollFrame:GetRegions()):Hide()
 		HelpFrameKnowledgebaseNavBar:GetRegions():Hide()
+		WhoListScrollFrame:GetRegions():Hide()
 		select(2, WhoListScrollFrame:GetRegions()):Hide()
 		select(2, GuildChallengeAlertFrame:GetRegions()):Hide()
 		InterfaceOptionsFrameTab1TabSpacer:SetAlpha(0)
@@ -3950,96 +4001,107 @@ Delay:RegisterEvent("PLAYER_ENTERING_WORLD")
 Delay:SetScript("OnEvent", function()
 	Delay:UnregisterEvent("PLAYER_ENTERING_WORLD")
 
-	if AuroraConfig.tooltips == true and not(IsAddOnLoaded("CowTip") or IsAddOnLoaded("TipTac") or IsAddOnLoaded("FreebTip") or IsAddOnLoaded("lolTip") or IsAddOnLoaded("StarTip") or IsAddOnLoaded("TipTop")) then
-		local tooltips = {
-			"GameTooltip",
-			"ItemRefTooltip",
-			"ShoppingTooltip1",
-			"ShoppingTooltip2",
-			"ShoppingTooltip3",
-			"WorldMapTooltip",
-			"ChatMenu",
-			"EmoteMenu",
-			"LanguageMenu",
-			"VoiceMacroMenu",
-		}
-
-		local backdrop = {
-			bgFile = C.media.backdrop,
-			edgeFile = C.media.backdrop,
-			edgeSize = 1,
-		}
-
-		-- so other stuff which tries to look like GameTooltip doesn't mess up
-		local getBackdrop = function()
-			return backdrop
+	if AuroraConfig.tooltips then
+		for addon in pairs(C.tooltipAddons) do
+			if IsAddOnLoaded(addon) then
+				C.shouldStyleTooltips = false
+				break
+			end
 		end
 
-		local getBackdropColor = function()
-			return 0, 0, 0, .6
+		if C.shouldStyleTooltips then
+			local tooltips = {
+				"GameTooltip",
+				"ItemRefTooltip",
+				"ShoppingTooltip1",
+				"ShoppingTooltip2",
+				"ShoppingTooltip3",
+				"WorldMapTooltip",
+				"ChatMenu",
+				"EmoteMenu",
+				"LanguageMenu",
+				"VoiceMacroMenu",
+			}
+
+			local backdrop = {
+				bgFile = C.media.backdrop,
+				edgeFile = C.media.backdrop,
+				edgeSize = 1,
+			}
+
+			-- so other stuff which tries to look like GameTooltip doesn't mess up
+			local getBackdrop = function()
+				return backdrop
+			end
+
+			local getBackdropColor = function()
+				return 0, 0, 0, .6
+			end
+
+			local getBackdropBorderColor = function()
+				return 0, 0, 0
+			end
+
+			for i = 1, #tooltips do
+				local t = _G[tooltips[i]]
+				t:SetBackdrop(nil)
+				local bg = CreateFrame("Frame", nil, t)
+				bg:SetPoint("TOPLEFT")
+				bg:SetPoint("BOTTOMRIGHT")
+				bg:SetFrameLevel(t:GetFrameLevel()-1)
+				bg:SetBackdrop(backdrop)
+				bg:SetBackdropColor(0, 0, 0, .6)
+				bg:SetBackdropBorderColor(0, 0, 0)
+
+				t.GetBackdrop = getBackdrop
+				t.GetBackdropColor = getBackdropColor
+				t.GetBackdropBorderColor = getBackdropBorderColor
+			end
+
+			local sb = _G["GameTooltipStatusBar"]
+			sb:SetHeight(3)
+			sb:ClearAllPoints()
+			sb:SetPoint("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 1, 1)
+			sb:SetPoint("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -1, 1)
+			sb:SetStatusBarTexture(C.media.backdrop)
+
+			local sep = GameTooltipStatusBar:CreateTexture(nil, "ARTWORK")
+			sep:SetHeight(1)
+			sep:SetPoint("BOTTOMLEFT", 0, 3)
+			sep:SetPoint("BOTTOMRIGHT", 0, 3)
+			sep:SetTexture(C.media.backdrop)
+			sep:SetVertexColor(0, 0, 0)
+
+			F.CreateBD(FriendsTooltip)
+
+			-- pet battle stuff
+
+			local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
+			for _, f in pairs(tooltips) do
+				f:DisableDrawLayer("BACKGROUND")
+				local bg = CreateFrame("Frame", nil, f)
+				bg:SetAllPoints()
+				bg:SetFrameLevel(0)
+				F.CreateBD(bg)
+			end
+
+			PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
+			PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
+			PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+			PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+			PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+			PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+			FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
+			FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+			FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
+			FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+			FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
+			FloatingBattlePetTooltip.Delimiter:SetHeight(1)
+			F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+			F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 		end
-
-		local getBackdropBorderColor = function()
-			return 0, 0, 0
-		end
-
-		for i = 1, #tooltips do
-			local t = _G[tooltips[i]]
-			t:SetBackdrop(nil)
-			local bg = CreateFrame("Frame", nil, t)
-			bg:SetPoint("TOPLEFT")
-			bg:SetPoint("BOTTOMRIGHT")
-			bg:SetFrameLevel(t:GetFrameLevel()-1)
-			bg:SetBackdrop(backdrop)
-			bg:SetBackdropColor(0, 0, 0, .6)
-			bg:SetBackdropBorderColor(0, 0, 0)
-
-			t.GetBackdrop = getBackdrop
-			t.GetBackdropColor = getBackdropColor
-			t.GetBackdropBorderColor = getBackdropBorderColor
-		end
-
-		local sb = _G["GameTooltipStatusBar"]
-		sb:SetHeight(3)
-		sb:ClearAllPoints()
-		sb:SetPoint("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 1, 1)
-		sb:SetPoint("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -1, 1)
-		sb:SetStatusBarTexture(C.media.backdrop)
-
-		local sep = GameTooltipStatusBar:CreateTexture(nil, "ARTWORK")
-		sep:SetHeight(1)
-		sep:SetPoint("BOTTOMLEFT", 0, 3)
-		sep:SetPoint("BOTTOMRIGHT", 0, 3)
-		sep:SetTexture(C.media.backdrop)
-		sep:SetVertexColor(0, 0, 0)
-
-		F.CreateBD(FriendsTooltip)
-
-		-- pet battle stuff
-
-		local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
-		for _, f in pairs(tooltips) do
-			f:DisableDrawLayer("BACKGROUND")
-			local bg = CreateFrame("Frame", nil, f)
-			bg:SetAllPoints()
-			bg:SetFrameLevel(0)
-			F.CreateBD(bg)
-		end
-
-		PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
-		PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetHeight(1)
-		F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-		F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
+	else
+		C.shouldStyleTooltips = false
 	end
 
 	if AuroraConfig.map == true and not(IsAddOnLoaded("MetaMap") or IsAddOnLoaded("m_Map") or IsAddOnLoaded("Mapster")) then
