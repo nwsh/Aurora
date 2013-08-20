@@ -41,9 +41,12 @@ AddOns\Blizzard_TrainerUI.lua
 AddOns\Blizzard_VoidStorageUI.lua
 AddOns\Recount.lua
 
+FrameXML\FlexRaidFrame.lua
 FrameXML\Fonts.lua
 FrameXML\LFDFrame.lua
 FrameXML\LFGFrame.lua
 FrameXML\PVEFrame.lua
+FrameXML\RaidFinder.lua
 FrameXML\RolePoll.lua
+FrameXML\ScenarioFinder.lua
 FrameXML\StaticPopup.lua
