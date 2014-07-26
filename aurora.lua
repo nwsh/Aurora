@@ -791,29 +791,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Dropdowns ]]
 
-		local dropdowns = {"LFDQueueFrameTypeDropDown", "WhoFrameDropDown", "FriendsFriendsFrameDropDown", "RaidFinderQueueFrameSelectionDropDown", "WorldMapShowDropDown", "Advanced_GraphicsAPIDropDown"}
-		for i = 1, #dropdowns do
-			local dropdown = _G[dropdowns[i]]
-			if dropdown then
-				F.ReskinDropDown(dropdown)
-			else
-				print("Aurora: "..dropdowns[i].." was not found.")
-			end
+		for _, dropdown in pairs({LFDQueueFrameTypeDropDown, WhoFrameDropDown, FriendsFriendsFrameDropDown, WorldMapLevelDropDown, RaidFinderQueueFrameSelectionDropDown, Advanced_GraphicsAPIDropDown}) do
+			F.ReskinDropDown(dropdown)
 		end
 
 		-- [[ Input frames ]]
 
-		local inputs = {"AddFriendNameEditBox", "GearManagerDialogPopupEditBox", "HelpFrameKnowledgebaseSearchBox", "ChannelFrameDaughterFrameChannelName", "ChannelFrameDaughterFrameChannelPassword", "BagItemSearchBox", "BankItemSearchBox", "ScrollOfResurrectionSelectionFrameTargetEditBox", "ScrollOfResurrectionFrameNoteFrame"}
-		for i = 1, #inputs do
-			local input = _G[inputs[i]]
-			if input then
-				F.ReskinInput(input)
-			else
-				print("Aurora: "..inputs[i].." was not found.")
-			end
+		for _, input in pairs({AddFriendNameEditBox, GearManagerDialogPopupEditBox, HelpFrameKnowledgebaseSearchBox, ChannelFrameDaughterFrameChannelName, ChannelFrameDaughterFrameChannelPassword, BagItemSearchBox, BankItemSearchBox, ScrollOfResurrectionSelectionFrameTargetEditBox, ScrollOfResurrectionFrameNoteFrame, FriendsFrameBroadcastInput}) do
+			F.ReskinInput(input)
 		end
-
-		F.ReskinInput(FriendsFrameBroadcastInput)
 
 		-- [[ Arrows ]]
 
