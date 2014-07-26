@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60000
 ## Title: Aurora
 ## Notes: Minimalistic window theme.
 ## Author: Haleth/Freethinker
@@ -42,7 +42,6 @@ AddOns\Blizzard_VoidStorageUI.lua
 AddOns\Recount.lua
 
 FrameXML\AlertFrames.lua
-FrameXML\FlexRaidFrame.lua
 FrameXML\Fonts.lua
 FrameXML\LFDFrame.lua
 FrameXML\LFGFrame.lua
