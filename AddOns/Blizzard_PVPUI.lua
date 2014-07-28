@@ -82,7 +82,7 @@ C.modules["Blizzard_PVPUI"] = function()
 
 	F.Reskin(BonusFrame.DiceButton)
 
-	for _, bu in pairs({BonusFrame.RandomBGButton, BonusFrame.CallToArmsButton, BonusFrame.WorldPVP1Button, BonusFrame.WorldPVP2Button}) do
+	for _, bu in pairs({BonusFrame.RandomBGButton, BonusFrame.Arena1Button, BonusFrame.Arena2Button}) do
 		F.Reskin(bu, true)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
@@ -351,6 +351,8 @@ C.modules["Blizzard_PVPUI"] = function()
 
 		hooksecurefunc(header, "SetNormalTexture", onSetNormalTexture)
 	end
+
+	F.ReskinCheck(WarGameTournamentModeCheckButton)
 
 	-- Main style
 

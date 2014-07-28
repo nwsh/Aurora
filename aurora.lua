@@ -1,7 +1,7 @@
 -- [[ Core ]]
 
 -- for custom APIs (see docs online)
-local LATEST_API_VERSION = "5.0.7"
+local LATEST_API_VERSION = "5.1"
 
 local addon, core = ...
 
@@ -1748,7 +1748,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		local function colourPopout(self)
 			local aR, aG, aB
-			local glow = self:GetParent().AuroraGlow
+			local glow = self:GetParent().IconBorder
 
 			if glow:IsShown() then
 				aR, aG, aB = glow:GetVertexColor()
@@ -1772,11 +1772,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, #slots do
 			local slot = _G["Character"..slots[i].."Slot"]
 			local ic = _G["Character"..slots[i].."SlotIconTexture"]
+			local border = slot.IconBorder
+
 			_G["Character"..slots[i].."SlotFrame"]:Hide()
 
 			slot:SetNormalTexture("")
 			slot:SetPushedTexture("")
 			ic:SetTexCoord(.08, .92, .08, .92)
+
+			border:SetTexture(C.media.backdrop)
+			border:SetPoint("TOPLEFT", -1, 1)
+			border:SetPoint("BOTTOMRIGHT", 1, -1)
+			border:SetDrawLayer("BACKGROUND")
 
 			local popout = slot.popoutButton
 

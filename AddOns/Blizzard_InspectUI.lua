@@ -22,10 +22,17 @@ C.modules["Blizzard_InspectUI"] = function()
 
 		for i = 1, #slots do
 			local slot = _G["Inspect"..slots[i].."Slot"]
+			local border = slot.IconBorder
+
 			_G["Inspect"..slots[i].."SlotFrame"]:Hide()
 
 			slot:SetNormalTexture("")
 			slot:SetPushedTexture("")
+
+			border:SetTexture(C.media.backdrop)
+			border:SetPoint("TOPLEFT", -1, 1)
+			border:SetPoint("BOTTOMRIGHT", 1, -1)
+			border:SetDrawLayer("BACKGROUND")
 
 			slot.icon:SetTexCoord(.08, .92, .08, .92)
 		end

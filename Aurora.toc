@@ -33,7 +33,6 @@ AddOns\Blizzard_MacroUI.lua
 AddOns\Blizzard_PetJournal.lua
 AddOns\Blizzard_PVPUI.lua
 AddOns\Blizzard_QuestChoice.lua
-AddOns\Blizzard_ReforgingUI.lua
 AddOns\Blizzard_TalentUI.lua
 AddOns\Blizzard_TimeManager.lua
 AddOns\Blizzard_TradeSkillUI.lua
