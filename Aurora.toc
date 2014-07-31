@@ -40,6 +40,8 @@ AddOns\Blizzard_TrainerUI.lua
 AddOns\Blizzard_VoidStorageUI.lua
 AddOns\Recount.lua
 
+SharedXML\AddonList.lua
+
 FrameXML\AlertFrames.lua
 FrameXML\Fonts.lua
 FrameXML\LFDFrame.lua
