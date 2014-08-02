@@ -1,7 +1,7 @@
 -- [[ Core ]]
 
 -- for custom APIs (see docs online)
-local LATEST_API_VERSION = "5.1"
+local LATEST_API_VERSION = "6.0"
 
 local addon, core = ...
 
@@ -377,10 +377,13 @@ end
 
 F.ReskinInput = function(f, height, width)
 	local frame = f:GetName()
-	if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
-	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
-	if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
+	local left = _G[frame.."Left"] or f.Left
+	local middle = _G[frame.."Middle"] or _G[frame.."Mid"] or f.Middle
+	local right = _G[frame.."Right"] or f.Right
+
+	left:Hide()
+	middle:Hide()
+	right:Hide()
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", -2, 0)
@@ -606,41 +609,6 @@ F.ReskinColourSwatch = function(f)
 	bg:SetPoint("BOTTOMRIGHT", -2, 2)
 end
 
-F.ColourQuality = function(button, id)
-	local quality, texture, _
-	local quest = _G[button:GetName().."IconQuestTexture"]
-
-	if id then
-		quality, _, _, _, _, _, _, texture = select(3, GetItemInfo(id))
-	end
-
-	local glow = button.AuroraGlow
-	if not glow then
-		glow = button:CreateTexture(nil, "BACKGROUND")
-		glow:SetPoint("TOPLEFT", -1, 1)
-		glow:SetPoint("BOTTOMRIGHT", 1, -1)
-		glow:SetTexture(C.media.backdrop)
-
-		button.AuroraGlow = glow
-	end
-
-	if texture then
-		local r, g, b
-
-		if quest and quest:IsShown() then
-			r, g, b = 1, 0, 0
-		else
-			r, g, b = GetItemQualityColor(quality)
-			if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
-		end
-
-		glow:SetVertexColor(r, g, b)
-		glow:Show()
-	else
-		glow:Hide()
-	end
-end
-
 -- [[ Variable and module handling ]]
 
 C.modules = {}
@@ -797,7 +765,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Input frames ]]
 
-		for _, input in pairs({AddFriendNameEditBox, GearManagerDialogPopupEditBox, HelpFrameKnowledgebaseSearchBox, ChannelFrameDaughterFrameChannelName, ChannelFrameDaughterFrameChannelPassword, BagItemSearchBox, BankItemSearchBox, ScrollOfResurrectionSelectionFrameTargetEditBox, ScrollOfResurrectionFrameNoteFrame, FriendsFrameBroadcastInput}) do
+		for _, input in pairs({AddFriendNameEditBox, GearManagerDialogPopupEditBox, HelpFrameKnowledgebaseSearchBox, ChannelFrameDaughterFrameChannelName, ChannelFrameDaughterFrameChannelPassword, ScrollOfResurrectionSelectionFrameTargetEditBox, ScrollOfResurrectionFrameNoteFrame, FriendsFrameBroadcastInput}) do
 			F.ReskinInput(input)
 		end
 
@@ -1825,8 +1793,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				else
 					slot.icon:SetAlpha(0)
 				end
-
-				F.ColourQuality(slot, slotLink)
 
 				colourPopout(slot.popoutButton)
 			end
@@ -3335,14 +3301,22 @@ Delay:SetScript("OnEvent", function()
 
 		for i = 1, 12 do
 			local con = _G["ContainerFrame"..i]
+			local name = _G["ContainerFrame"..i.."Name"]
 
-			for j = 1, 7 do
+			for j = 1, 5 do
 				select(j, con:GetRegions()):SetAlpha(0)
 			end
+			select(7, con:GetRegions()):SetAlpha(0)
+
+			con.PortraitButton.Highlight:SetTexture("")
+
+			name:ClearAllPoints()
+			name:SetPoint("TOP", 0, -10)
 
 			for k = 1, MAX_CONTAINER_ITEMS do
 				local item = "ContainerFrame"..i.."Item"..k
 				local button = _G[item]
+				local border = button.IconBorder
 
 				_G[item.."IconQuestTexture"]:SetAlpha(0)
 
@@ -3353,6 +3327,11 @@ Delay:SetScript("OnEvent", function()
 				button.icon:SetTexCoord(.08, .92, .08, .92)
 
 				button.bg = F.CreateBDFrame(button, 0)
+
+				border:SetTexture(C.media.backdrop)
+				border:SetPoint("TOPLEFT", -1, 1)
+				border:SetPoint("BOTTOMRIGHT", 1, -1)
+				border:SetDrawLayer("BACKGROUND", 1)
 
 				button:HookScript("OnEnter", onEnter)
 				button:HookScript("OnLeave", onLeave)
@@ -3374,6 +3353,24 @@ Delay:SetScript("OnEvent", function()
 			F.CreateBG(ic)
 		end
 
+		F.ReskinInput(BagItemSearchBox)
+
+		hooksecurefunc("ContainerFrame_Update", function(frame)
+			local id = frame:GetID()
+			if id == 0 then
+				BagItemSearchBox:ClearAllPoints()
+				BagItemSearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 50, -35)
+				BagItemAutoSortButton:ClearAllPoints()
+				BagItemAutoSortButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -9, -31)
+			end
+		end)
+
+		BagItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
+		BagItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
+		F.CreateBG(BagItemAutoSortButton)
+
+		-- Bank
+
 		F.SetBD(BankFrame)
 		BankFrame:DisableDrawLayer("BACKGROUND")
 		BankFrame:DisableDrawLayer("BORDER")
@@ -3381,8 +3378,8 @@ Delay:SetScript("OnEvent", function()
 		BankPortraitTexture:Hide()
 		BankFrameMoneyFrameInset:Hide()
 		BankFrameMoneyFrameBorder:Hide()
-
 		F.Reskin(BankFramePurchaseButton)
+		F.ReskinInput(BankItemSearchBox)
 		F.ReskinClose(BankFrameCloseButton)
 
 		for i = 1, 28 do
@@ -3404,7 +3401,7 @@ Delay:SetScript("OnEvent", function()
 		end
 
 		for i = 1, 7 do
-			local bag = _G["BankFrameBag"..i]
+			local bag = BankSlotsFrame["Bag"..i]
 
 			-- _G["BankFrameBag"..i.."HighlightFrameTexture"]:SetTexture(C.media.checked)
 
@@ -3419,21 +3416,6 @@ Delay:SetScript("OnEvent", function()
 			bag:HookScript("OnEnter", onEnter)
 			bag:HookScript("OnLeave", onLeave)
 		end
-
-		hooksecurefunc("ContainerFrame_Update", function(self)
-			local name = self:GetName()
-			local id = self:GetID()
-
-			for i = 1, self.size do
-				local button = _G[name.."Item"..i]
-				local itemID = GetContainerItemID(id, button:GetID())
-				F.ColourQuality(button, itemID)
-			end
-		end)
-
-		hooksecurefunc("BankFrameItemButton_Update", function(self)
-			F.ColourQuality(self, GetInventoryItemID("player", self:GetInventorySlot()))
-		end)
 	end
 
 	if AuroraConfig.loot == true and not(IsAddOnLoaded("Butsu") or IsAddOnLoaded("LovelyLoot") or IsAddOnLoaded("XLoot")) then
