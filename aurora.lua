@@ -1162,8 +1162,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.ReskinPortraitFrame(MailFrame, true)
 		F.ReskinPortraitFrame(OpenMailFrame, true)
-		F.ReskinPortraitFrame(MailFrame, true)
-		F.ReskinPortraitFrame(OpenMailFrame, true)
 		F.ReskinInput(SendMailNameEditBox, 20)
 		F.ReskinInput(SendMailSubjectEditBox)
 		F.ReskinInput(SendMailMoneyGold)
