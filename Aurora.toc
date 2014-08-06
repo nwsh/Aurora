@@ -43,6 +43,7 @@ AddOns\Recount.lua
 SharedXML\AddonList.lua
 
 FrameXML\AlertFrames.lua
+FrameXML\Constants.lua
 FrameXML\Fonts.lua
 FrameXML\LFDFrame.lua
 FrameXML\LFGFrame.lua
