@@ -57,6 +57,7 @@ FrameXML\RecruitAFriendFrame.lua
 FrameXML\RolePoll.lua
 FrameXML\ScenarioFinder.lua
 FrameXML\SpellBookFrame.lua
+FrameXML\SplashFrame.lua
 FrameXML\StaticPopup.lua
 FrameXML\TaxiFrame.lua
 FrameXML\WorldStateFrame.lua
