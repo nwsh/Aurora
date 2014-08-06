@@ -111,5 +111,6 @@ tinsert(C.modules["Aurora"], function()
 
 		-- Why?
 		HelpFrameKnowledgebaseNavBarHomeButtonText:SetFont(font, 12)
+		WorldMapFrameNavBarHomeButtonText:SetFont(font, 12)
 	end
 end)
