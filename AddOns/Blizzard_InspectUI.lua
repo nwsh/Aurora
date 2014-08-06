@@ -12,7 +12,7 @@ C.modules["Blizzard_InspectUI"] = function()
 
 		-- Character
 
-		select(9, InspectMainHandSlot:GetRegions()):Hide()
+		select(10, InspectMainHandSlot:GetRegions()):Hide()
 
 		local slots = {
 			"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
@@ -54,7 +54,7 @@ C.modules["Blizzard_InspectUI"] = function()
 
 		inspectSpec.ring:Hide()
 
-		for i = 1, 6 do
+		for i = 1, 7 do
 			local row = InspectTalentFrame.InspectTalents["tier"..i]
 			for j = 1, 3 do
 				local bu = row["talent"..j]
