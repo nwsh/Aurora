@@ -759,14 +759,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Dropdowns ]]
 
-		for _, dropdown in pairs({LFDQueueFrameTypeDropDown, WhoFrameDropDown, FriendsFriendsFrameDropDown, WorldMapLevelDropDown, RaidFinderQueueFrameSelectionDropDown, Advanced_GraphicsAPIDropDown}) do
-			F.ReskinDropDown(dropdown)
+		for _, dropdown in pairs({"LFDQueueFrameTypeDropDown", "WhoFrameDropDown", "FriendsFriendsFrameDropDown", "WorldMapLevelDropDown", "RaidFinderQueueFrameSelectionDropDown", "Advanced_GraphicsAPIDropDown"}) do
+			F.ReskinDropDown(_G[dropdown])
 		end
 
 		-- [[ Input frames ]]
 
-		for _, input in pairs({AddFriendNameEditBox, GearManagerDialogPopupEditBox, HelpFrameKnowledgebaseSearchBox, ChannelFrameDaughterFrameChannelName, ChannelFrameDaughterFrameChannelPassword, ScrollOfResurrectionSelectionFrameTargetEditBox, ScrollOfResurrectionFrameNoteFrame, FriendsFrameBroadcastInput}) do
-			F.ReskinInput(input)
+		for _, input in pairs({"AddFriendNameEditBox", "GearManagerDialogPopupEditBox", "HelpFrameKnowledgebaseSearchBox", "ChannelFrameDaughterFrameChannelName", "ChannelFrameDaughterFrameChannelPassword", "ScrollOfResurrectionSelectionFrameTargetEditBox", "ScrollOfResurrectionFrameNoteFrame", "FriendsFrameBroadcastInput"}) do
+			F.ReskinInput(_G[input])
 		end
 
 		-- [[ Arrows ]]
@@ -2107,8 +2107,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		for _, questButton in pairs({QuestFrameAcceptButton, QuestFrameDeclineButton, QuestFrameCompleteQuestButton, QuestFrameCompleteButton, QuestFrameGoodbyeButton, QuestFrameGreetingGoodbyeButton}) do
-			F.Reskin(questButton)
+		for _, questButton in pairs({"QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton"}) do
+			F.Reskin(_G[questButton])
 		end
 
 		F.ReskinScroll(QuestProgressScrollFrameScrollBar)

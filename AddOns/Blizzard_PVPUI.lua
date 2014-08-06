@@ -82,7 +82,9 @@ C.modules["Blizzard_PVPUI"] = function()
 
 	F.Reskin(BonusFrame.DiceButton)
 
-	for _, bu in pairs({BonusFrame.RandomBGButton, BonusFrame.Arena1Button, BonusFrame.Arena2Button}) do
+	for _, bonusButton in pairs({"RandomBGButton", "Arena1Button", "Arena2Button"}) do
+		local bu = BonusFrame[bonusButton]
+
 		F.Reskin(bu, true)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
