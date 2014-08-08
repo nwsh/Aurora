@@ -620,8 +620,8 @@ end
 
 -- [[ Variable and module handling ]]
 
-C.modules = {}
-C.modules["Aurora"] = {}
+C.themes = {}
+C.themes["Aurora"] = {}
 
 local Skin = CreateFrame("Frame", nil, UIParent)
 Skin:RegisterEvent("ADDON_LOADED")
@@ -701,7 +701,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 	-- [[ Load modules ]]
 
 	-- check if the addon loaded is supported by Aurora, and if it is, execute its module
-	local addonModule = C.modules[addon]
+	local addonModule = C.themes[addon]
 	if addonModule then
 		if type(addonModule) == "function" then
 			addonModule()

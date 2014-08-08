@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-C.modules["Blizzard_BarbershopUI"] = function()
+C.themes["Blizzard_BarbershopUI"] = function()
 	BarberShopFrameBackground:Hide()
 	BarberShopFrameMoneyFrame:GetRegions():Hide()
 	BarberShopAltFormFrameBackground:Hide()

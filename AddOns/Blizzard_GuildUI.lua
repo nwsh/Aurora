@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-C.modules["Blizzard_GuildUI"] = function()
+C.themes["Blizzard_GuildUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	F.ReskinPortraitFrame(GuildFrame, true)

@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-C.modules["Blizzard_PetJournal"] = function()
+C.themes["Blizzard_PetJournal"] = function()
 	local r, g, b = C.r, C.g, C.b
 
 	local PetJournal = PetJournal
@@ -124,6 +124,12 @@ C.modules["Blizzard_PetJournal"] = function()
 	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
 	F.CreateBG(MountJournalSummonRandomFavoriteButton)
+
+	do
+		local ic = MountJournal.MountDisplay.InfoButton.Icon
+		ic:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(ic)
+	end
 
 	if C.shouldStyleTooltips then
 		for _, f in pairs({PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}) do
