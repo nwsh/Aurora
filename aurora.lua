@@ -3080,11 +3080,21 @@ Delay:SetScript("OnEvent", function()
 
 		hooksecurefunc("ContainerFrame_Update", function(frame)
 			local id = frame:GetID()
+			local name = frame:GetName()
+
 			if id == 0 then
 				BagItemSearchBox:ClearAllPoints()
 				BagItemSearchBox:SetPoint("TOPLEFT", frame, "TOPLEFT", 50, -35)
 				BagItemAutoSortButton:ClearAllPoints()
 				BagItemAutoSortButton:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -9, -31)
+			end
+
+			for i = 1, frame.size do
+				local itemButton = _G[name.."Item"..i]
+
+				if _G[name.."Item"..i.."IconQuestTexture"]:IsShown() then
+					itemButton.IconBorder:SetVertexColor(1, 1, 0)
+				end
 			end
 		end)
 
@@ -3098,39 +3108,54 @@ Delay:SetScript("OnEvent", function()
 		BankFrame:DisableDrawLayer("BACKGROUND")
 		BankFrame:DisableDrawLayer("BORDER")
 		BankFrame:DisableDrawLayer("OVERLAY")
+		BankSlotsFrame:DisableDrawLayer("BORDER")
 		BankPortraitTexture:Hide()
 		BankFrameMoneyFrameInset:Hide()
 		BankFrameMoneyFrameBorder:Hide()
+
+		select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
+		select(10, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
+
 		F.Reskin(BankFramePurchaseButton)
 		F.ReskinInput(BankItemSearchBox)
 		F.ReskinClose(BankFrameCloseButton)
 
 		for i = 1, 28 do
 			local item = "BankFrameItem"..i
-			local button = _G[item]
+			local bu = _G[item]
+			local border = bu.IconBorder
 
-			-- _G[item.."IconQuestTexture"]:SetAlpha(0)
+			bu.IconQuestTexture:SetAlpha(0)
 
-			button:SetNormalTexture("")
-			button:SetPushedTexture("")
-			button:SetHighlightTexture("")
+			border:SetTexture(C.media.backdrop)
+			border:SetPoint("TOPLEFT", -1, 1)
+			border:SetPoint("BOTTOMRIGHT", 1, -1)
+			border:SetDrawLayer("BACKGROUND", 1)
 
-			button.icon:SetTexCoord(.08, .92, .08, .92)
+			bu:SetNormalTexture("")
+			bu:SetPushedTexture("")
+			bu:SetHighlightTexture("")
 
-			button.bg = F.CreateBDFrame(button, 0)
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
 
-			button:HookScript("OnEnter", onEnter)
-			button:HookScript("OnLeave", onLeave)
+			bu.bg = F.CreateBDFrame(bu, 0)
+
+			bu:HookScript("OnEnter", onEnter)
+			bu:HookScript("OnLeave", onLeave)
 		end
 
 		for i = 1, 7 do
 			local bag = BankSlotsFrame["Bag"..i]
-
-			-- _G["BankFrameBag"..i.."HighlightFrameTexture"]:SetTexture(C.media.checked)
+			local border = bag.IconBorder
 
 			bag:SetNormalTexture("")
 			bag:SetPushedTexture("")
 			bag:SetHighlightTexture("")
+
+			border:SetTexture(C.media.backdrop)
+			border:SetPoint("TOPLEFT", -1, 1)
+			border:SetPoint("BOTTOMRIGHT", 1, -1)
+			border:SetDrawLayer("BACKGROUND", 1)
 
 			bag.icon:SetTexCoord(.08, .92, .08, .92)
 
@@ -3139,6 +3164,16 @@ Delay:SetScript("OnEvent", function()
 			bag:HookScript("OnEnter", onEnter)
 			bag:HookScript("OnLeave", onLeave)
 		end
+
+		BankItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
+		BankItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
+		F.CreateBG(BankItemAutoSortButton)
+
+		hooksecurefunc("BankFrameItemButton_Update", function(button)
+			if not button.isBag and button.IconQuestTexture:IsShown() then
+				button.IconBorder:SetVertexColor(1, 1, 0)
+			end
+		end)
 	end
 
 	if AuroraConfig.loot == true and not(IsAddOnLoaded("Butsu") or IsAddOnLoaded("LovelyLoot") or IsAddOnLoaded("XLoot")) then
@@ -3169,7 +3204,7 @@ Delay:SetScript("OnEvent", function()
 			end
 
 			if select(6, GetLootSlotInfo(index)) then
-				ic.bg:SetVertexColor(1, 0, 0)
+				ic.bg:SetVertexColor(1, 1, 0)
 			else
 				ic.bg:SetVertexColor(0, 0, 0)
 			end
