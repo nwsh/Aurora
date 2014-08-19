@@ -1705,8 +1705,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(send)
 		F.Reskin(cancel)
 
-		F.ReskinScroll(BattleTagInviteFrameScrollFrameScrollBar)
-
 		-- Nav Bar
 
 		local function moveNavButtons(self)
