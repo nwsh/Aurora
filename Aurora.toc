@@ -66,6 +66,7 @@ FrameXML\SpellBookFrame.lua
 FrameXML\SplashFrame.lua
 FrameXML\StaticPopup.lua
 FrameXML\TaxiFrame.lua
+FrameXML\VideoOptionsFrame.lua
 FrameXML\WorldMapFrame.lua
 FrameXML\WorldStateFrame.lua
 
