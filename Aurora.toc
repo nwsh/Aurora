@@ -47,6 +47,7 @@ FrameXML\EquipmentFlyout.lua
 FrameXML\Fonts.lua
 FrameXML\LFDFrame.lua
 FrameXML\LFGFrame.lua
+FrameXML\LFGList.lua
 FrameXML\LFRFrame.lua
 FrameXML\LootHistory.lua
 FrameXML\ModelPreviewFrame.lua
