@@ -3065,11 +3065,14 @@ Delay:SetScript("OnEvent", function()
 
 		for i = 1, 7 do
 			local bag = BankSlotsFrame["Bag"..i]
+			local _, highlightFrame = bag:GetChildren()
 			local border = bag.IconBorder
 
 			bag:SetNormalTexture("")
 			bag:SetPushedTexture("")
 			bag:SetHighlightTexture("")
+
+			highlightFrame:GetRegions():SetTexture(C.media.checked)
 
 			border:SetTexture(C.media.backdrop)
 			border:SetPoint("TOPLEFT", -1, 1)
