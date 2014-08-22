@@ -3031,27 +3031,25 @@ Delay:SetScript("OnEvent", function()
 		BagItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
 		F.CreateBG(BagItemAutoSortButton)
 
-		-- Bank
+		-- [[ Bank ]]
 
-		F.SetBD(BankFrame)
-		BankFrame:DisableDrawLayer("BACKGROUND")
-		BankFrame:DisableDrawLayer("BORDER")
-		BankFrame:DisableDrawLayer("OVERLAY")
+		select(16, BankFrame:GetRegions()):Hide()
 		BankSlotsFrame:DisableDrawLayer("BORDER")
 		BankPortraitTexture:Hide()
 		BankFrameMoneyFrameInset:Hide()
 		BankFrameMoneyFrameBorder:Hide()
 
+		-- "item slots" and "bag slots" text
 		select(9, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
 		select(10, BankSlotsFrame:GetRegions()):SetDrawLayer("OVERLAY")
 
+		F.ReskinPortraitFrame(BankFrame)
 		F.Reskin(BankFramePurchaseButton)
+		F.ReskinTab(BankFrameTab1)
+		F.ReskinTab(BankFrameTab2)
 		F.ReskinInput(BankItemSearchBox)
-		F.ReskinClose(BankFrameCloseButton)
 
-		for i = 1, 28 do
-			local item = "BankFrameItem"..i
-			local bu = _G[item]
+		local function styleBankButton(bu)
 			local border = bu.IconBorder
 
 			bu.IconQuestTexture:SetAlpha(0)
@@ -3071,6 +3069,10 @@ Delay:SetScript("OnEvent", function()
 
 			bu:HookScript("OnEnter", onEnter)
 			bu:HookScript("OnLeave", onLeave)
+		end
+
+		for i = 1, 28 do
+			styleBankButton(_G["BankFrameItem"..i])
 		end
 
 		for i = 1, 7 do
@@ -3104,6 +3106,28 @@ Delay:SetScript("OnEvent", function()
 		hooksecurefunc("BankFrameItemButton_Update", function(button)
 			if not button.isBag and button.IconQuestTexture:IsShown() then
 				button.IconBorder:SetVertexColor(1, 1, 0)
+			end
+		end)
+
+		-- [[ Reagent bank ]]
+
+		ReagentBankFrame:DisableDrawLayer("BACKGROUND")
+		ReagentBankFrame:DisableDrawLayer("BORDER")
+		ReagentBankFrame:DisableDrawLayer("ARTWORK")
+
+		F.Reskin(ReagentBankFrame.DespositButton)
+		F.Reskin(ReagentBankFrameUnlockInfoPurchaseButton)
+
+		-- make button more visible
+		ReagentBankFrameUnlockInfoBlackBG:SetTexture(.1, .1, .1)
+
+		local reagentButtonsStyled = false
+		ReagentBankFrame:HookScript("OnShow", function()
+			if not reagentButtonsStyled then
+				for i = 1, 98 do
+					styleBankButton(_G["ReagentBankFrameItem"..i])
+				end
+				reagentButtonsStyled = true
 			end
 		end)
 	end
