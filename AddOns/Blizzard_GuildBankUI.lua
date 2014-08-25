@@ -69,6 +69,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		for j = 1, NUM_SLOTS_PER_GUILDBANK_GROUP do
 			local bu = _G["GuildBankColumn"..i.."Button"..j]
 			local border = bu.IconBorder
+			local searchOverlay = bu.searchOverlay
 
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
@@ -79,6 +80,9 @@ C.themes["Blizzard_GuildBankUI"] = function()
 			border:SetPoint("TOPLEFT", -1, 1)
 			border:SetPoint("BOTTOMRIGHT", 1, -1)
 			border:SetDrawLayer("BACKGROUND")
+
+			searchOverlay:SetPoint("TOPLEFT", -1, 1)
+			searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
 		end
 	end
 

@@ -2883,6 +2883,7 @@ Delay:SetScript("OnEvent", function()
 				local item = "ContainerFrame"..i.."Item"..k
 				local button = _G[item]
 				local border = button.IconBorder
+				local searchOverlay = button.searchOverlay
 				local newItemTexture = button.NewItemTexture
 
 				_G[item.."IconQuestTexture"]:SetAlpha(0)
@@ -2903,6 +2904,9 @@ Delay:SetScript("OnEvent", function()
 				border:SetPoint("TOPLEFT", -1, 1)
 				border:SetPoint("BOTTOMRIGHT", 1, -1)
 				border:SetDrawLayer("BACKGROUND", 1)
+
+				searchOverlay:SetPoint("TOPLEFT", -1, 1)
+				searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
 
 				button:HookScript("OnEnter", onEnter)
 				button:HookScript("OnLeave", onLeave)
@@ -2970,6 +2974,7 @@ Delay:SetScript("OnEvent", function()
 
 		local function styleBankButton(bu)
 			local border = bu.IconBorder
+			local searchOverlay = bu.searchOverlay
 
 			bu.IconQuestTexture:SetAlpha(0)
 
@@ -2977,6 +2982,9 @@ Delay:SetScript("OnEvent", function()
 			border:SetPoint("TOPLEFT", -1, 1)
 			border:SetPoint("BOTTOMRIGHT", 1, -1)
 			border:SetDrawLayer("BACKGROUND", 1)
+
+			searchOverlay:SetPoint("TOPLEFT", -1, 1)
+			searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
 
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
@@ -2998,6 +3006,7 @@ Delay:SetScript("OnEvent", function()
 			local bag = BankSlotsFrame["Bag"..i]
 			local _, highlightFrame = bag:GetChildren()
 			local border = bag.IconBorder
+			local searchOverlay = bag.searchOverlay
 
 			bag:SetNormalTexture("")
 			bag:SetPushedTexture("")
@@ -3009,6 +3018,9 @@ Delay:SetScript("OnEvent", function()
 			border:SetPoint("TOPLEFT", -1, 1)
 			border:SetPoint("BOTTOMRIGHT", 1, -1)
 			border:SetDrawLayer("BACKGROUND", 1)
+
+			searchOverlay:SetPoint("TOPLEFT", -1, 1)
+			searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
 
 			bag.icon:SetTexCoord(.08, .92, .08, .92)
 
