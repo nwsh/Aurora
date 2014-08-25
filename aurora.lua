@@ -2876,6 +2876,7 @@ Delay:SetScript("OnEvent", function()
 				local item = "ContainerFrame"..i.."Item"..k
 				local button = _G[item]
 				local border = button.IconBorder
+				local newItemTexture = button.NewItemTexture
 
 				_G[item.."IconQuestTexture"]:SetAlpha(0)
 
@@ -2886,6 +2887,10 @@ Delay:SetScript("OnEvent", function()
 				button.icon:SetTexCoord(.08, .92, .08, .92)
 
 				button.bg = F.CreateBDFrame(button, 0)
+
+				-- easiest way to 'hide' it without breaking stuff
+				newItemTexture:SetDrawLayer("BACKGROUND")
+				newItemTexture:SetSize(1, 1)
 
 				border:SetTexture(C.media.backdrop)
 				border:SetPoint("TOPLEFT", -1, 1)
