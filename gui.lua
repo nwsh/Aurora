@@ -19,12 +19,20 @@ local function copyTable(source, target)
 	end
 end
 
+local function addSubCategory(parent, name)
+	local header = parent:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	header:SetText(name)
+
+	local line = parent:CreateTexture(nil, "ARTWORK")
+	line:SetSize(450, 1)
+	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
+	line:SetTexture(1, 1, 1, .2)
+
+	return header
+end
+
 local function toggle(f)
-	if f:GetChecked() then
-		AuroraConfig[f.value] = true
-	else
-		AuroraConfig[f.value] = false
-	end
+	AuroraConfig[f.value] = f:GetChecked()
 end
 
 local function createToggleBox(parent, value, text)
@@ -50,24 +58,26 @@ local title = gui:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint("TOP", 0, -26)
 title:SetText("Aurora "..GetAddOnMetadata("Aurora", "Version"))
 
-local credits = gui:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-credits:SetText("Aurora by Lightsword @ Argent Dawn - EU / Haleth on wowinterface.com")
-credits:SetPoint("TOP", 0, -380)
+local features = addSubCategory(gui, "Features")
+features:SetPoint("TOPLEFT", 16, -80)
 
-local alphaSlider = CreateFrame("Slider", "AuroraOptionsAlpha", gui, "OptionsSliderTemplate")
-alphaSlider:SetPoint("TOPLEFT", 16, -80)
-BlizzardOptionsPanel_Slider_Enable(alphaSlider)
-alphaSlider:SetMinMaxValues(0, 1)
-alphaSlider:SetValueStep(0.1)
-AuroraOptionsAlphaText:SetText("Backdrop opacity")
+local bagsBox = createToggleBox(gui, "bags", "Bags")
+bagsBox:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
 
-local line = gui:CreateTexture(nil, "ARTWORK")
-line:SetSize(600, 1)
-line:SetPoint("TOPLEFT", alphaSlider, "BOTTOMLEFT", 0, -30)
-line:SetTexture(1, 1, 1, .2)
+local chatBubbleBox = createToggleBox(gui, "chatBubbles", "Chat bubbles")
+chatBubbleBox:SetPoint("LEFT", bagsBox, "RIGHT", 90, 0)
+
+local lootBox = createToggleBox(gui, "loot", "Loot")
+lootBox:SetPoint("TOPLEFT", bagsBox, "BOTTOMLEFT", 0, -8)
+
+local tooltipsBox = createToggleBox(gui, "tooltips", "Tooltips")
+tooltipsBox:SetPoint("LEFT", lootBox, "RIGHT", 90, 0)
+
+local appearance = addSubCategory(gui, "Appearance")
+appearance:SetPoint("TOPLEFT", lootBox, "BOTTOMLEFT", 0, -30)
 
 local fontBox = createToggleBox(gui, "enableFont", "Replace default game fonts")
-fontBox:SetPoint("TOPLEFT", 16, -140)
+fontBox:SetPoint("TOPLEFT", appearance, "BOTTOMLEFT", 0, -20)
 
 local colourBox = createToggleBox(gui, "useCustomColour", "Custom highlight colour")
 colourBox:SetPoint("TOPLEFT", fontBox, "BOTTOMLEFT", 0, -8)
@@ -80,31 +90,30 @@ colourButton:SetText("Change...")
 local useButtonGradientColourBox = createToggleBox(gui, "useButtonGradientColour", "Gradient button style")
 useButtonGradientColourBox:SetPoint("TOPLEFT", colourBox, "BOTTOMLEFT", 0, -8)
 
-local bagsBox = createToggleBox(gui, "bags", "Bags")
-bagsBox:SetPoint("TOPLEFT", useButtonGradientColourBox, "BOTTOMLEFT", 0, -16)
+local alphaSlider = CreateFrame("Slider", "AuroraOptionsAlpha", gui, "OptionsSliderTemplate")
+alphaSlider:SetPoint("TOPLEFT", useButtonGradientColourBox, "BOTTOMLEFT", 0, -40)
+BlizzardOptionsPanel_Slider_Enable(alphaSlider)
+alphaSlider:SetMinMaxValues(0, 1)
+alphaSlider:SetValueStep(0.1)
+AuroraOptionsAlphaText:SetText("Backdrop opacity *")
 
-local chatBubbleBox = createToggleBox(gui, "chatBubbles", "Chat bubbles")
-chatBubbleBox:SetPoint("LEFT", bagsBox, "RIGHT", 90, 0)
-
-local lootBox = createToggleBox(gui, "loot", "Loot")
-lootBox:SetPoint("TOPLEFT", bagsBox, "BOTTOMLEFT", 0, -8)
-
-local tooltipsBox = createToggleBox(gui, "tooltips", "Tooltips")
-tooltipsBox:SetPoint("LEFT", lootBox, "RIGHT", 90, 0)
+local line = gui:CreateTexture(nil, "ARTWORK")
+line:SetSize(600, 1)
+line:SetPoint("TOPLEFT", alphaSlider, "BOTTOMLEFT", 0, -30)
+line:SetTexture(1, 1, 1, .2)
 
 local reloadText = gui:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", bagsBox, "BOTTOMLEFT", 0, -60)
-reloadText:SetText("These settings require a UI reload.")
+reloadText:SetPoint("TOPLEFT", line, "BOTTOMLEFT", 0, -40)
+reloadText:SetText("Settings not marked with an asterisk (*) require a UI reload.")
 
 local reloadButton = CreateFrame("Button", nil, gui, "UIPanelButtonTemplate")
 reloadButton:SetPoint("LEFT", reloadText, "RIGHT", 20, 0)
 reloadButton:SetSize(128, 25)
 reloadButton:SetText("Reload UI")
 
-local line2 = gui:CreateTexture(nil, "ARTWORK")
-line2:SetSize(600, 1)
-line2:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -30)
-line2:SetTexture(1, 1, 1, .2)
+local credits = gui:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+credits:SetText("Aurora by Lightsword @ Argent Dawn - EU / Haleth on wowinterface.com")
+credits:SetPoint("BOTTOM", 0, 40)
 
 -- add event handlers
 
