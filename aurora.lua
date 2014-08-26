@@ -43,6 +43,8 @@ C.media = {
 }
 
 C.defaults = {
+	["acknowledgedSplashScreen"] = false,
+
 	["alpha"] = 0.5,
 	["bags"] = true,
 	["buttonGradientColour"] = {.3, .3, .3, .3},
@@ -686,6 +688,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Custom style support ]]
 
+		local shouldSkipSplashScreen = false
+
 		local customStyle = AURORA_CUSTOM_STYLE
 
 		if customStyle and customStyle.apiVersion ~= nil and customStyle.apiVersion == LATEST_API_VERSION then
@@ -713,6 +717,21 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if highlightColour then
 				r, g, b = highlightColour.r, highlightColour.g, highlightColour.b
 				C.r, C.g, C.b = r, g, b
+			end
+
+			-- skip splash screen if requested
+			if customStyle.skipSplashScreen then
+				shouldSkipSplashScreen = true
+			end
+		end
+
+		-- [[ Splash screen for first time users ]]
+
+		if not AuroraConfig.acknowledgedSplashScreen then
+			if shouldSkipSplashScreen then
+				AuroraConfig.acknowledgedSplashScreen = true
+			else
+				AuroraSplashScreen:Show()
 			end
 		end
 	end

@@ -1,5 +1,39 @@
 local F, C = unpack(Aurora)
 
+-- [[ Splash screen ]]
+
+local splash = CreateFrame("Frame", "AuroraSplashScreen", UIParent)
+splash:SetPoint("CENTER")
+splash:SetSize(400, 300)
+splash:Hide()
+
+do
+	local title = splash:CreateFontString(nil, "ARTWORK", "GameFont_Gigantic")
+	title:SetTextColor(1, 1, 1)
+	title:SetPoint("TOP", 0, -25)
+	title:SetText("Aurora "..GetAddOnMetadata("Aurora", "Version"))
+
+	local body = splash:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	body:SetPoint("TOP", title, "BOTTOM", 0, -20)
+	body:SetWidth(360)
+	body:SetJustifyH("CENTER")
+	body:SetText("Thank you for using Aurora!\n\n\nType |cff00a0ff/aurora|r at any time to access Aurora's options.\n\nThere, you can customize the addon's appearance.\n\nYou can also turn off optional features such as bags and tooltips if they are incompatible with your other addons.\n\n\n\nEnjoy!")
+
+	local okayButton = CreateFrame("Button", nil, splash, "UIPanelButtonTemplate")
+	okayButton:SetSize(128, 25)
+	okayButton:SetPoint("BOTTOM", 0, 10)
+	okayButton:SetText("Got it")
+	okayButton:SetScript("OnClick", function()
+		splash:Hide()
+		AuroraConfig.acknowledgedSplashScreen = true
+	end)
+
+	splash.okayButton = okayButton
+	splash.closeButton = CreateFrame("Button", nil, splash, "UIPanelCloseButton")
+end
+
+-- [[ Options UI ]]
+
 -- these variables are loaded on init and updated only on gui.okay. Calling gui.cancel resets the saved vars to these
 local old = {}
 
@@ -135,6 +169,10 @@ gui:SetScript("OnEvent", function(self, _, addon)
 
 	-- fill 'old' table
 	copyTable(AuroraConfig, old)
+
+	F.CreateBD(splash)
+	F.Reskin(splash.okayButton)
+	F.ReskinClose(splash.closeButton)
 
 	F.Reskin(reloadButton)
 	F.Reskin(colourButton)
