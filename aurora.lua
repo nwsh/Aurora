@@ -3,6 +3,9 @@
 -- for custom APIs (see docs online)
 local LATEST_API_VERSION = "6.0"
 
+-- see F.AddPlugin
+local AURORA_LOADED = false
+
 local addon, core = ...
 
 core[1] = {} -- F, functions
@@ -645,6 +648,18 @@ end
 C.themes = {}
 C.themes["Aurora"] = {}
 
+-- use of this function ensures that Aurora and custom style (if used) are properly initialised
+-- prior to loading third party plugins
+F.AddPlugin = function(func)
+	if AURORA_LOADED then
+		func()
+	else
+		tinsert(C.themes["Aurora"], func)
+	end
+end
+
+-- [[ Initialize addon ]]
+
 local Skin = CreateFrame("Frame", nil, UIParent)
 Skin:RegisterEvent("ADDON_LOADED")
 Skin:SetScript("OnEvent", function(self, event, addon)
@@ -693,10 +708,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local customStyle = AURORA_CUSTOM_STYLE
 
 		if customStyle and customStyle.apiVersion ~= nil and customStyle.apiVersion == LATEST_API_VERSION then
+			local protectedFunctions = {
+				["AddPlugin"] = true,
+			}
+
 			-- replace functions
 			if customStyle.functions then
 				for funcName, func in pairs(customStyle.functions) do
-					if F[funcName] then
+					if F[funcName] and not protectedFunctions[funcName] then
 						F[funcName] = func
 					end
 				end
@@ -735,6 +754,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 	end
+
+	-- [[ Plugin helper ]]
+
+	-- from this point, plugins added with F.AddPlugin are executed directly instead of cached
+	AURORA_LOADED = true
 
 	-- [[ Load modules ]]
 
