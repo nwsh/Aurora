@@ -34,9 +34,11 @@ tinsert(C.themes["Aurora"], function()
 			local button = _G[item]
 			local border = button.IconBorder
 			local searchOverlay = button.searchOverlay
+			local questTexture = _G[item.."IconQuestTexture"]
 			local newItemTexture = button.NewItemTexture
 
-			_G[item.."IconQuestTexture"]:SetAlpha(0)
+			questTexture:SetDrawLayer("BACKGROUND")
+			questTexture:SetSize(1, 1)
 
 			button:SetNormalTexture("")
 			button:SetPushedTexture("")

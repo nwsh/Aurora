@@ -33,9 +33,11 @@ tinsert(C.themes["Aurora"], function()
 
 	local function styleBankButton(bu)
 		local border = bu.IconBorder
+		local questTexture = bu.IconQuestTexture
 		local searchOverlay = bu.searchOverlay
 
-		bu.IconQuestTexture:SetAlpha(0)
+		questTexture:SetDrawLayer("BACKGROUND")
+		questTexture:SetSize(1, 1)
 
 		border:SetTexture(C.media.backdrop)
 		border:SetPoint("TOPLEFT", -1, 1)
