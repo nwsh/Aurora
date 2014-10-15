@@ -2764,8 +2764,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		if IsAddOnLoaded("ACP") then F.Reskin(GameMenuButtonAddOns) end
-
 		local closebuttons = {"HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
 		for i = 1, #closebuttons do
 			local closebutton = _G[closebuttons[i]]
